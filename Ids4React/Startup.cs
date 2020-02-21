@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +32,20 @@ namespace Ids4React
             {
                 configuration.RootPath = "wwwroot";
             });
+
+            services.AddIdentityServer()
+                .AddInMemoryIdentityResources(Config.Ids)
+                .AddInMemoryApiResources(Config.Apis)
+                .AddInMemoryClients(Config.Clients)
+                .AddDeveloperSigningCredential();
+
+            services.AddAuthentication()
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
+                {
+                    opt.RequireHttpsMetadata = true;
+                });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +62,9 @@ namespace Ids4React
 
             app.UseRouting();
 
+
+            app.UseIdentityServer();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -58,9 +76,9 @@ namespace Ids4React
             app.UseSpa(spa =>
             {
                 spa.Options.DefaultPage = new Microsoft.AspNetCore.Http.PathString("/index.html");
-  
+
             });
-   
+
         }
     }
 }
