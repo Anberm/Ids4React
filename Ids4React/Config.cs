@@ -20,7 +20,7 @@ namespace Ids4React
         public static IEnumerable<ApiResource> Apis =>
            new List<ApiResource>
             {
-                new ApiResource("sap-api", "Spa API")
+                new ApiResource("spa", "Spa Client")
             };
 
 
@@ -29,18 +29,24 @@ namespace Ids4React
             {
                 new Client
                 {
-                        ClientId = "spa api",
-                        AllowedGrantTypes=GrantTypes.Implicit,
-                        ClientSecrets =new List<Secret>()
-                        {
-                            new Secret("123456".Sha256())
-                        },
+                        ClientId = "spa",
+                        ClientName="spa client",
+                        AllowedGrantTypes = GrantTypes.Code,
+                        RequirePkce=true,
+                        RequireClientSecret=false,
+                        RedirectUris =           { "http://localhost:8000/callback" },
+                        PostLogoutRedirectUris = { "http://localhost:8000" },
+                        AllowedCorsOrigins =     { "http://localhost:8000" },
+                        //ClientSecrets =new List<Secret>()
+                        //{
+                        //    new Secret("123456".Sha256())
+                        //},
+                       
                         AllowedScopes =
                         {
                             IdentityServerConstants.StandardScopes.OpenId,
                             IdentityServerConstants.StandardScopes.Profile,
-                            IdentityServerConstants.StandardScopes.Email,
-                            "spaapi"
+                            "spa"
                         },
                 }
             };

@@ -4,6 +4,20 @@ import { Subscription, Effect } from 'dva';
 import { NoticeIconData } from '@/components/NoticeIcon';
 import { queryNotices } from '@/services/user';
 import { ConnectState } from './connect.d';
+import { UserManager } from 'oidc-client';
+
+const config = {
+  authority: 'https://localhost:44341',
+  automaticSilentRenew: true,
+  client_id: 'spa',
+  // client_secret: '123456',
+  loadUserInfo: true,
+  post_logout_redirect_uri: 'http://localhost:8000',
+  redirect_uri: 'http://localhost:8000/callback',
+  response_type: 'code',
+  scope: 'openid profile spa',
+};
+export const mgr = new UserManager(config);
 
 export interface NoticeItem extends NoticeIconData {
   id: string;

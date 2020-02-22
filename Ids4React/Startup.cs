@@ -33,7 +33,14 @@ namespace Ids4React
                 configuration.RootPath = "wwwroot";
             });
 
-            services.AddIdentityServer()
+            services.AddIdentityServer(options =>
+            {
+                options.UserInteraction = new IdentityServer4.Configuration.UserInteractionOptions
+                {
+                    LoginUrl = "user/login",
+                    ErrorUrl="api/error"
+                };
+            })
                 .AddInMemoryIdentityResources(Config.Ids)
                 .AddInMemoryApiResources(Config.Apis)
                 .AddInMemoryClients(Config.Clients)

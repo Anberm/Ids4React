@@ -2,6 +2,7 @@ import { Effect } from 'dva';
 import { Reducer } from 'redux';
 
 import { queryCurrent, query as queryUsers } from '@/services/user';
+import { mgr } from './global';
 
 export interface CurrentUser {
   avatar?: string;
@@ -51,10 +52,17 @@ const UserModel: UserModelType = {
     },
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response,
-      });
+      debugger;
+      if (response) {
+        yield put({
+          type: 'saveCurrentUser',
+          payload: response,
+        });
+      } else {
+        mgr.signinRedirect();
+        return;
+      }
+
     },
   },
 
